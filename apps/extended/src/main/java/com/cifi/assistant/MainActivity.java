@@ -44,7 +44,7 @@ public final class MainActivity extends Activity {
         site.loadUrl("https://cifi-tools.com/borge");
     }
     private void openWebsiteInBrowser(){
-        openBrowser("https://cifi-tools.com/borge",false);
+        openBrowser("https://cifi-tools.com/borge",true);
     }
     private void openSettingsInBrowser(){
         openBrowser("https://cifi-tools.com/settings",true);
