@@ -26,7 +26,32 @@ rust_host=$(rustc -vV | sed -n 's/^host: //p')
 rust_target=${RUST_TARGET:-$rust_host}
 [[ "$rust_target" == aarch64-linux-android ]] || { echo 'Set RUST_TARGET=aarch64-linux-android and configure an Android linker' >&2; exit 1; }
 rust_args=(); if [[ -n ${RUST_TARGET:-} ]]; then rust_args=(--target "$RUST_TARGET"); fi
+if [[ -n ${HOME:-} ]]; then rust_args+=("--remap-path-prefix=$HOME=/cifi-home"); fi
+if [[ -n ${PREFIX:-} ]]; then rust_args+=("--remap-path-prefix=$PREFIX=/cifi-prefix"); fi
+rust_args+=("--remap-path-prefix=$repo=/cifi-source" "--remap-path-prefix=$build=/cifi-build")
+# Termux clang otherwise injects its local library directory into the ELF.
+# This driver option is specific to Termux, not an Android NDK option.
+termux_native=false
+if [[ "$rust_host" == aarch64-linux-android && -n ${PREFIX:-} ]]; then
+    command -v clang >/dev/null && command -v readelf >/dev/null || { echo 'Termux native builds require clang and readelf' >&2; exit 1; }
+    clang_help=$(clang --help)
+    [[ "$clang_help" == *-fno-termux-rpath* ]] || { echo 'Termux clang does not support -fno-termux-rpath' >&2; exit 1; }
+    rust_args+=(-C link-arg=-fno-termux-rpath)
+    termux_native=true
+fi
 rustc "${rust_args[@]}" --edition=2021 --crate-type cdylib -C opt-level=2 -C debuginfo=0 "$repo/engine/native_bridge.rs" -o "$build/lib/arm64-v8a/libcifi_math.so"
+if "$termux_native"; then
+    dynamic=$(readelf -d "$build/lib/arm64-v8a/libcifi_math.so")
+    [[ "$dynamic" != *'(RPATH)'* && "$dynamic" != *'(RUNPATH)'* ]] || { echo 'Native library contains a local runtime search path' >&2; exit 1; }
+    python3 - "$build/lib/arm64-v8a/libcifi_math.so" "$repo" "$build" <<'PYPATH'
+import os, sys
+from pathlib import Path
+data = Path(sys.argv[1]).read_bytes()
+for value in (os.environ.get('HOME'), os.environ.get('PREFIX'), *sys.argv[2:]):
+    if value and len(value) > 1 and os.fsencode(value) in data:
+        raise SystemExit('Native library contains a local build path')
+PYPATH
+fi
 python3 - "$build/lib/arm64-v8a/libcifi_math.so" <<'PYCHECK'
 from pathlib import Path
 import sys

@@ -10,4 +10,6 @@ ANDROID_JAR=/path/to/android.jar OUTPUT_APK=/path/to/new-unsigned.apk bash build
 
 When cross-compiling, set `RUST_TARGET=aarch64-linux-android` and configure the target linker. The script packages the experimental Rust math library, which is not connected to website simulations. An unsigned APK was built on the development phone using Android SDK 36; it has not been installed or tested on Android. Sign with your own Android signing key before installation. A differently signed APK cannot update an existing installation; uninstalling can erase that app's data.
 
+On a native Termux ARM64 toolchain the build also requires `clang` and `readelf`; it disables Termux's automatic runtime search path and refuses the library if known local build paths or ELF runtime search paths remain. Cross-host NDK builds use their configured linker and have not been verified by this check.
+
 The included Gradle module builds the Java/WebView source but does not yet package the Rust library; its full build has not been tested. The website and game remain separate third-party services.
