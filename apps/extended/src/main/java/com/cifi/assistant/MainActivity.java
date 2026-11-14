@@ -28,7 +28,7 @@ public final class MainActivity extends Activity {
         super.onCreate(state);getWindow().setStatusBarColor(0xff111827);getWindow().setNavigationBarColor(0xff111827);
         if((getApplicationInfo().flags&android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE)!=0)WebView.setWebContentsDebuggingEnabled(true);
         site=new WebView(this);WebSettings settings=site.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(false);
-        site.setWebViewClient(new WebViewClient(){@Override public boolean shouldOverrideUrlLoading(WebView view,WebResourceRequest request){String host=request.getUrl().getHost();return !"https".equalsIgnoreCase(request.getUrl().getScheme())||!"cifi-tools.com".equalsIgnoreCase(host);}});
+        site.setWebViewClient(new WebViewClient(){@Override public boolean shouldOverrideUrlLoading(WebView view,WebResourceRequest request){Uri url=request.getUrl();java.net.URI parsed=CifiOrigin.httpsUri(url==null?null:url.toString());if(parsed==null)return true;if(CifiOrigin.trusted(parsed))return false;if(request.isForMainFrame()&&request.hasGesture())openExternalLink(url);return true;}});
         FrameLayout root=new FrameLayout(this);root.addView(site,new FrameLayout.LayoutParams(-1,-1));
         sync=new Button(this);sync.setText("Sync");sync.setAllCaps(false);sync.setTextColor(Color.WHITE);sync.setContentDescription("Sync CIFI game data");
         GradientDrawable bg=new GradientDrawable();bg.setColor(0xff5136a3);bg.setCornerRadius(32*getResources().getDisplayMetrics().density);sync.setBackground(bg);
@@ -45,6 +45,10 @@ public final class MainActivity extends Activity {
     }
     private void openSettingsInBrowser(){
         openBrowser("https://cifi-tools.com/settings");
+    }
+    private void openExternalLink(Uri url){
+        try {startActivity(new Intent(Intent.ACTION_VIEW,url));message("The browser has its own sign-in and saved data.");}
+        catch(ActivityNotFoundException | SecurityException error) {message("No browser is available to open this link.");}
     }
     private void openBrowser(String url){
         try {

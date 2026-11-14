@@ -22,7 +22,7 @@ public final class SiteAdapter {
     }
     private boolean trusted() {
         String url=view.getUrl();if(url==null)return false;Uri parsed=Uri.parse(url);
-        return "https".equalsIgnoreCase(parsed.getScheme()) && "cifi-tools.com".equalsIgnoreCase(parsed.getHost());
+        return CifiOrigin.trusted(CifiOrigin.httpsUri(parsed.toString()));
     }
     private String prefix() {
         return "(()=>{if(location.origin!=='https://cifi-tools.com')throw Error('origin');"+
