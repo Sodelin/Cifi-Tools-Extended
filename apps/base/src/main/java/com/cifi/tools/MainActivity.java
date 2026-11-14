@@ -31,12 +31,16 @@ public final class MainActivity extends Activity {
         TextView hint=new TextView(this);hint.setText("Use the browser where you signed in to CIFI Tools.");hint.setTextColor(0xffd1d5db);hint.setGravity(Gravity.CENTER);hint.setPadding(0,18,0,24);root.addView(hint);
         Button open=new Button(this);open.setText("Open CIFI Tools");open.setAllCaps(false);open.setOnClickListener(v->openTools(false));root.addView(open);
         Button chooseBrowser=new Button(this);chooseBrowser.setText("Choose browser");chooseBrowser.setAllCaps(false);chooseBrowser.setOnClickListener(v->openTools(true));root.addView(chooseBrowser);
+        Button settings=new Button(this);settings.setText("Website settings and backups");settings.setAllCaps(false);settings.setOnClickListener(v->openSite("https://cifi-tools.com/settings",false));root.addView(settings);
         compare=new Button(this);compare.setText("Compare two backup files");compare.setAllCaps(false);
         compare.setOnClickListener(v->{firstFile=null;chooseFile(FIRST_FILE);});root.addView(compare);setContentView(root);
         if(state==null)openTools(false);
     }
     private void openTools(boolean chooseBrowser){
-        Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse("https://cifi-tools.com/borge"));
+        openSite("https://cifi-tools.com/borge",chooseBrowser);
+    }
+    private void openSite(String address,boolean chooseBrowser){
+        Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(address));
         // Standard Custom Tabs protocol, using the user's chosen browser and its session.
         Bundle extras=new Bundle();extras.putBinder("android.support.customtabs.extra.SESSION",null);intent.putExtras(extras);
         try{startActivity(chooseBrowser ? Intent.createChooser(intent,"Choose your browser") : intent);}catch(ActivityNotFoundException e){new android.app.AlertDialog.Builder(this).setMessage("Install or enable a browser to open CIFI Tools.").setPositiveButton("OK",null).show();}
