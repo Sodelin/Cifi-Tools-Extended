@@ -33,12 +33,15 @@ public final class MainActivity extends Activity {
         sync=new Button(this);sync.setText("Sync");sync.setAllCaps(false);sync.setTextColor(Color.WHITE);sync.setContentDescription("Sync CIFI game data");
         GradientDrawable bg=new GradientDrawable();bg.setColor(0xff5136a3);bg.setCornerRadius(32*getResources().getDisplayMetrics().density);sync.setBackground(bg);
         FrameLayout.LayoutParams pos=new FrameLayout.LayoutParams((int)(80*getResources().getDisplayMetrics().density),(int)(48*getResources().getDisplayMetrics().density),Gravity.RIGHT|Gravity.BOTTOM);int margin=(int)(16*getResources().getDisplayMetrics().density);pos.setMargins(margin,margin,margin,margin);root.addView(sync,pos);
-        sync.setOnClickListener(v->{PopupMenu menu=new PopupMenu(this,sync);menu.getMenu().add(0,1,0,"Refresh from CIFI");menu.getMenu().add(0,2,1,"Finish previous refresh");menu.getMenu().add(0,3,2,"Sync signed-in website");menu.getMenu().add(0,4,3,"What gets imported?");menu.getMenu().add(0,5,4,"Open Borge in browser");menu.getMenu().add(0,8,7,"Open settings in browser");menu.setOnMenuItemClickListener(item->{if(item.getItemId()==8)openSettingsInBrowser();else if(item.getItemId()==4)showImportInfo();else if(item.getItemId()==5)openWebsiteInBrowser();else requestAction(item.getItemId());return true;});menu.show();});
+        sync.setOnClickListener(v->{PopupMenu menu=new PopupMenu(this,sync);menu.getMenu().add(0,1,0,"Refresh from CIFI");menu.getMenu().add(0,2,1,"Finish previous refresh");menu.getMenu().add(0,3,2,"Sync signed-in website");menu.getMenu().add(0,4,3,"What gets imported?");menu.getMenu().add(0,9,4,"Open Borge in app");menu.getMenu().add(0,5,4,"Open Borge in browser");menu.getMenu().add(0,8,7,"Open settings in browser");menu.setOnMenuItemClickListener(item->{if(item.getItemId()==8)openSettingsInBrowser();else if(item.getItemId()==9)openBorgeInApp();else if(item.getItemId()==4)showImportInfo();else if(item.getItemId()==5)openWebsiteInBrowser();else requestAction(item.getItemId());return true;});menu.show();});
         setContentView(root);try{adapter=new SiteAdapter(this,site);}catch(Exception ignored){adapter=null;}
         if(state==null||site.restoreState(state)==null)site.loadUrl("https://cifi-tools.com/borge");
     }
     private void showImportInfo(){
         new AlertDialog.Builder(this).setTitle("Game data and freshness").setMessage("You can use the simulator with the data already saved in CIFI Tools. That data may be older than your current game; check important values before simulating.\n\nGame refresh, refresh verification and website sync are temporarily unavailable. If a previous refresh is awaiting verification, keep its recovery record and do not repeat it.\n\nImported coverage is partial. Some inputs, including individual trinkets and ship rank and crew totals, are not included. Your existing builds are kept.").setPositiveButton("OK",null).show();
+    }
+    private void openBorgeInApp(){
+        site.loadUrl("https://cifi-tools.com/borge");
     }
     private void openWebsiteInBrowser(){
         openBrowser("https://cifi-tools.com/borge");
