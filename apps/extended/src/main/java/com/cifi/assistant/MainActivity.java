@@ -44,19 +44,19 @@ public final class MainActivity extends Activity {
         site.loadUrl("https://cifi-tools.com/borge");
     }
     private void openWebsiteInBrowser(){
-        openBrowser("https://cifi-tools.com/borge");
+        openBrowser("https://cifi-tools.com/borge",false);
     }
     private void openSettingsInBrowser(){
-        openBrowser("https://cifi-tools.com/settings");
+        openBrowser("https://cifi-tools.com/settings",true);
     }
     private void openExternalLink(Uri url){
         try {startActivity(new Intent(Intent.ACTION_VIEW,url));message("The browser has its own sign-in and saved data.");}
         catch(ActivityNotFoundException | SecurityException error) {message("No browser is available to open this link.");}
     }
-    private void openBrowser(String url){
+    private void openBrowser(String url,boolean chooseBrowser){
         try {
             Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(url));
-            startActivity(intent);
+            startActivity(chooseBrowser?Intent.createChooser(intent,"Choose your browser"):intent);
             message("The browser has its own sign-in and saved data.");
         } catch(ActivityNotFoundException | SecurityException error) { message("No browser is available to open CIFI Tools."); }
     }
