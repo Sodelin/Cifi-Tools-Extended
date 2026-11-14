@@ -14,7 +14,7 @@ Both apps use the existing remotely hosted website; this repository does not con
 
 ## Build
 
-Open the project in Android Studio with Android SDK 35 and JDK 17. The Gradle files describe two application modules. No Gradle wrapper or signed APK is included yet. Builds and installation from this public snapshot have not been independently verified on Android. Android will not update an existing install signed with a different key, and uninstalling an existing app may remove its local data.
+Open the project in Android Studio with Android SDK 35 and JDK 17. The Gradle files describe two application modules. No Gradle wrapper or signed APK is included yet. The base module also has a host-tested unsigned build script; Gradle builds and installation from this public snapshot have not been verified on Android. Android will not update an existing install signed with a different key, and uninstalling an existing app may remove its local data.
 
 ## Source and attribution
 
