@@ -33,7 +33,7 @@ public final class MainActivity extends Activity {
         sync=new Button(this);sync.setText("Sync");sync.setAllCaps(false);sync.setTextColor(Color.WHITE);sync.setContentDescription("Sync CIFI game data");
         GradientDrawable bg=new GradientDrawable();bg.setColor(0xff5136a3);bg.setCornerRadius(32*getResources().getDisplayMetrics().density);sync.setBackground(bg);
         FrameLayout.LayoutParams pos=new FrameLayout.LayoutParams((int)(80*getResources().getDisplayMetrics().density),(int)(48*getResources().getDisplayMetrics().density),Gravity.RIGHT|Gravity.BOTTOM);int margin=(int)(16*getResources().getDisplayMetrics().density);pos.setMargins(margin,margin,margin,margin);root.addView(sync,pos);
-        sync.setOnClickListener(v->{PopupMenu menu=new PopupMenu(this,sync);menu.getMenu().add(0,1,0,"Refresh from CIFI");menu.getMenu().add(0,2,1,"Finish previous refresh");menu.getMenu().add(0,3,2,"Sync signed-in website");menu.getMenu().add(0,4,3,"What gets imported?");menu.getMenu().add(0,5,4,"Open website in browser");menu.setOnMenuItemClickListener(item->{if(item.getItemId()==4)showImportInfo();else if(item.getItemId()==5)openWebsiteInBrowser();else requestAction(item.getItemId());return true;});menu.show();});
+        sync.setOnClickListener(v->{PopupMenu menu=new PopupMenu(this,sync);menu.getMenu().add(0,1,0,"Refresh from CIFI");menu.getMenu().add(0,2,1,"Finish previous refresh");menu.getMenu().add(0,3,2,"Sync signed-in website");menu.getMenu().add(0,4,3,"What gets imported?");menu.getMenu().add(0,5,4,"Open Borge in browser");menu.setOnMenuItemClickListener(item->{if(item.getItemId()==4)showImportInfo();else if(item.getItemId()==5)openWebsiteInBrowser();else requestAction(item.getItemId());return true;});menu.show();});
         setContentView(root);try{adapter=new SiteAdapter(this,site);}catch(Exception ignored){adapter=null;}
         if(state==null||site.restoreState(state)==null)site.loadUrl("https://cifi-tools.com/borge");
     }
@@ -42,7 +42,7 @@ public final class MainActivity extends Activity {
     }
     private void openWebsiteInBrowser(){
         try {
-            Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse("https://cifi-tools.com/"));
+            Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse("https://cifi-tools.com/borge"));
             startActivity(intent);
             message("The browser has its own sign-in and saved data.");
         } catch(ActivityNotFoundException | SecurityException error) { message("No browser is available to open CIFI Tools."); }
