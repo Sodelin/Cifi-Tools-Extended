@@ -6,6 +6,12 @@ Android experiments that put the community CIFI Tools website within reach on a 
 - **CIFI Tools Extended** (`apps/extended`) displays the existing website inside an app window. A previous private-device test ran a Borge simulation using partially imported game data. This public source does not include anyone's save, profile, or account. The website's simulator is used; the experimental Rust code does not replace it.
 - **Rust experiments** (`engine`) contain independent numerical primitives. The unsigned Extended build script packages the math library, but it is not connected to the site's simulations.
 
+## Using Borge in Extended
+
+Open Extended to reach the Borge page. If you navigate away, use the **Sync** menu and choose **Open Borge in app** to return. Select an available build on the website and use its evaluation controls. The site can also be opened in a browser from the same menu.
+
+Extended and the browser have separate website storage and sign-in sessions. A new installation does not contain a game save or a previously imported build from another profile. If the current Extended profile already contains an imported build, its values may be partial or older than the game; review important inputs before relying on a result. These instructions describe the source here, not an automatically updated version of an already installed app.
+
 ## Current limits
 
 This is development source, not a finished release. Direct or automatic CIFI save import, account synchronization inside Extended, independent verification of simulator accuracy, offline use, and parity between apps are not complete. The Extended refresh and website-sync actions are disabled. The phone-specific Termux signer and runner have been removed from this public snapshot. Do not use it to replace an existing app expecting the same signing key or local data.
