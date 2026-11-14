@@ -4,7 +4,7 @@ Android experiments that put the community CIFI Tools website within reach on a 
 
 - **CIFI Tools** (`apps/base`) opens the existing website using a browser-owned session. The current prototype can offer a browser chooser and compare two selected files. Its phone behavior and sign-in have not been verified for a general release.
 - **CIFI Tools Extended** (`apps/extended`) displays the existing website inside an app window. A previous private-device test ran a Borge simulation using partially imported game data. This public source does not include anyone's save, profile, or account. The website's simulator is used; the experimental Rust code does not replace it.
-- **Rust experiments** (`engine`) contain independent numerical primitives. They are not yet packaged into this Android build or connected to the site's simulations.
+- **Rust experiments** (`engine`) contain independent numerical primitives. The unsigned Extended build script packages the math library, but it is not connected to the site's simulations.
 
 ## Current limits
 
@@ -14,7 +14,7 @@ Both apps use the existing remotely hosted website; this repository does not con
 
 ## Build
 
-Open the project in Android Studio with Android SDK 35 and JDK 17. The Gradle files describe two application modules. No Gradle wrapper or signed APK is included yet. The base module also has a host-tested unsigned build script; Gradle builds and installation from this public snapshot have not been verified on Android. Android will not update an existing install signed with a different key, and uninstalling an existing app may remove its local data.
+Open the project in Android Studio with Android SDK 35 and JDK 17. The Gradle files describe two application modules. No Gradle wrapper or signed APK is included yet. Both modules also have host-tested unsigned build scripts; Gradle builds and installation from this public snapshot have not been verified on Android. The Extended script requires a Rust `aarch64-linux-android` toolchain and linker (set `RUST_TARGET=aarch64-linux-android` when cross-compiling). Android will not update an existing install signed with a different key, and uninstalling an existing app may remove its local data.
 
 ## Source and attribution
 
